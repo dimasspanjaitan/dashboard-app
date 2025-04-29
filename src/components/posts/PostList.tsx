@@ -11,7 +11,7 @@ export default function PostList({ posts }: { posts: Post[] }) {
     return (
         <div>
             {posts.map((post: Post) => (
-                <div>
+                <div key={post.id}>
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
                         <div>
                             <p className="text-sm font-bold text-gray-800 dark:text-white/90">{

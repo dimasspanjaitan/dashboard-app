@@ -6,6 +6,13 @@ import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { userSchema } from './userSchema';
+import * as yup from 'yup';
+
+const apiUrl = process.env.API_URL;
+
 type User = {
   id: number;
   name: string;
@@ -27,7 +34,7 @@ type User = {
       name: string;
       catchPhrase: string;
       bs: string;
-  }
+  },
 };
 
 function splitName(fullName: string): { firstName: string; lastName: string } {
@@ -38,14 +45,55 @@ function splitName(fullName: string): { firstName: string; lastName: string } {
   };
 }
 
-export default function UserInfoCard({ user }: {user: User}) {
+export default function UserInfoCard({ 
+  user, 
+  onSubmit,
+}: {
+  user: User;
+  onSubmit: (data: User) => void;
+}) {
   const { firstName, lastName } = splitName(user.name);
   const { isOpen, openModal, closeModal } = useModal();
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
-    closeModal();
+
+  const handleSave = async (data: any) => {
+    try {
+      const res = await fetch(apiUrl +  `/users/${user.id}`, {
+        method: 'PUT', // or PATCH
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+      console.log('Updated user:', result);
+      alert('User updated successfully!');
+      onClose(); // close modal after success
+    } catch (err) {
+      console.error('Update failed', err);
+      alert('Failed to update user');
+    }
   };
+  
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<User>({
+    resolver: yupResolver(userSchema),
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      website: user.website,
+      company: user.company.name,
+      street: user.address.street,
+      suite: user.address.suite,
+      city: user.address.city,
+      zipcode: user.address.zipcode
+    },
+  });
+
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -188,7 +236,7 @@ export default function UserInfoCard({ user }: {user: User}) {
               Update user details to keep profile up-to-date.
             </p>
           </div>
-          <form className="flex flex-col">
+          <form onSubmit={handleSubmit(handleSave)} className="flex flex-col">
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
               <div className="mt-7">
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
@@ -198,27 +246,32 @@ export default function UserInfoCard({ user }: {user: User}) {
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Full Name</Label>
-                    <Input type="text" defaultValue={user.name} />
+                    <input {...register('name')} placeholder="Name" />
+                    {errors.name && <p>{errors.name.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Email Address</Label>
-                    <Input type="text" defaultValue={user.email} />
+                    <input {...register('email')} placeholder="Email" />
+                    {errors.email && <p>{errors.email.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Phone</Label>
-                    <Input type="text" defaultValue={user.phone} />
+                    <input {...register('phone')} placeholder="Phone" />
+                    {errors.phone && <p>{errors.phone.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Website</Label>
-                    <Input type="text" defaultValue={user.website} />
+                    <input {...register('website')} placeholder="Website" />
+                    {errors.website && <p>{errors.website.message}</p>}
                   </div>
 
                   <div className="col-span-2">
                     <Label>Company</Label>
-                    <Input type="text" defaultValue={user.company.name} />
+                    <input {...register('company')} placeholder="Company" />
+                    {errors.company && <p>{errors.company.message}</p>}
                   </div>
                 </div>
               </div>
@@ -230,22 +283,26 @@ export default function UserInfoCard({ user }: {user: User}) {
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Street</Label>
-                    <Input type="text" defaultValue={user.address.street} />
+                    <input {...register('street')} placeholder="Street" />
+                    {errors.street && <p>{errors.street.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Suite</Label>
-                    <Input type="text" defaultValue={user.address.suite} />
+                    <input {...register('suite')} placeholder="Suite" />
+                    {errors.suite && <p>{errors.suite.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>City</Label>
-                    <Input type="text" defaultValue={user.address.city} />
+                    <input {...register('city')} placeholder="City" />
+                    {errors.city && <p>{errors.city.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Zipcode</Label>
-                    <Input type="text" defaultValue={user.address.zipcode} />
+                    <input {...register('zipcode')} placeholder="Zipcode" />
+                    {errors.zipcode && <p>{errors.zipcode.message}</p>}
                   </div>
                 </div>
               </div>
@@ -254,7 +311,7 @@ export default function UserInfoCard({ user }: {user: User}) {
               <Button size="sm" variant="outline" onClick={closeModal}>
                 Close
               </Button>
-              <Button size="sm" onClick={handleSave}>
+              <Button size="sm" type="submit">
                 Save Changes
               </Button>
             </div>
