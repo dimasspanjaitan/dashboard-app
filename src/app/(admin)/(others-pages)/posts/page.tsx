@@ -14,6 +14,7 @@ const apiUrl = process.env.API_URL;
 
 async function getPosts() {
     const res = await fetch(apiUrl + '/posts', {
+        cache: 'no-store',
         next: {
             revalidate: 60, // Revalidate every 1 minute (ISR / Incremental Static Regeneration)
         }
