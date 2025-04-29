@@ -6,7 +6,40 @@ import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 
-export default function UserInfoCard() {
+type User = {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  address: {
+      street: string;
+      suite: string;
+      city: string;
+      zipcode: string;
+      geo: {
+          lat: string;
+          lng: string;
+      };
+  };
+  phone: string;
+  website: string
+  company: {
+      name: string;
+      catchPhrase: string;
+      bs: string;
+  }
+};
+
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const [firstName, ...rest] = fullName.trim().split(" ");
+  return {
+    firstName,
+    lastName: rest.join(" "),
+  };
+}
+
+export default function UserInfoCard({ user }: {user: User}) {
+  const { firstName, lastName } = splitName(user.name);
   const { isOpen, openModal, closeModal } = useModal();
   const handleSave = () => {
     // Handle save logic here
@@ -27,7 +60,7 @@ export default function UserInfoCard() {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Musharof
+                {firstName}
               </p>
             </div>
 
@@ -36,7 +69,7 @@ export default function UserInfoCard() {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Chowdhury
+                {lastName}
               </p>
             </div>
 
@@ -45,7 +78,7 @@ export default function UserInfoCard() {
                 Email address
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                randomuser@pimjo.com
+                {user.email}
               </p>
             </div>
 
@@ -54,20 +87,73 @@ export default function UserInfoCard() {
                 Phone
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                +09 363 398 46
+                {user.phone}
               </p>
             </div>
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Bio
+                Website
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                Team Manager
+                {user.website}
+              </p>
+            </div>
+
+            <div>
+              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                Company
+              </p>
+              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                {user.company .name}
               </p>
             </div>
           </div>
         </div>
+
+        <div>
+            <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
+              Address
+            </h4>
+
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-7 2xl:gap-x-32">
+                            <div>
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                  Street
+                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                  {user.address.street}
+                </p>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                  Suite
+                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                  {user.address.suite}
+                </p>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                  City/State
+                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                  {user.address.city}
+                </p>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                  Zipcode
+                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                  {user.address.zipcode}
+                </p>
+              </div>
+            </div>
+          </div>
 
         <button
           onClick={openModal}
@@ -99,47 +185,11 @@ export default function UserInfoCard() {
               Edit Personal Information
             </h4>
             <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Update your details to keep your profile up-to-date.
+              Update user details to keep profile up-to-date.
             </p>
           </div>
           <form className="flex flex-col">
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
-              <div>
-                <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-                  Social Links
-                </h5>
-
-                <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-                  <div>
-                    <Label>Facebook</Label>
-                    <Input
-                      type="text"
-                      defaultValue="https://www.facebook.com/PimjoHQ"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>X.com</Label>
-                    <Input type="text" defaultValue="https://x.com/PimjoHQ" />
-                  </div>
-
-                  <div>
-                    <Label>Linkedin</Label>
-                    <Input
-                      type="text"
-                      defaultValue="https://www.linkedin.com/company/pimjo"
-                    />
-                  </div>
-
-                  <div>
-                    <Label>Instagram</Label>
-                    <Input
-                      type="text"
-                      defaultValue="https://instagram.com/PimjoHQ"
-                    />
-                  </div>
-                </div>
-              </div>
               <div className="mt-7">
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
                   Personal Information
@@ -147,28 +197,55 @@ export default function UserInfoCard() {
 
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
-                    <Label>First Name</Label>
-                    <Input type="text" defaultValue="Musharof" />
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Last Name</Label>
-                    <Input type="text" defaultValue="Chowdhury" />
+                    <Label>Full Name</Label>
+                    <Input type="text" defaultValue={user.name} />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Email Address</Label>
-                    <Input type="text" defaultValue="randomuser@pimjo.com" />
+                    <Input type="text" defaultValue={user.email} />
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Phone</Label>
-                    <Input type="text" defaultValue="+09 363 398 46" />
+                    <Input type="text" defaultValue={user.phone} />
+                  </div>
+
+                  <div className="col-span-2 lg:col-span-1">
+                    <Label>Website</Label>
+                    <Input type="text" defaultValue={user.website} />
                   </div>
 
                   <div className="col-span-2">
-                    <Label>Bio</Label>
-                    <Input type="text" defaultValue="Team Manager" />
+                    <Label>Company</Label>
+                    <Input type="text" defaultValue={user.company.name} />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-7">
+                <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+                  Address
+                </h5>
+
+                <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                  <div className="col-span-2 lg:col-span-1">
+                    <Label>Street</Label>
+                    <Input type="text" defaultValue={user.address.street} />
+                  </div>
+
+                  <div className="col-span-2 lg:col-span-1">
+                    <Label>Suite</Label>
+                    <Input type="text" defaultValue={user.address.suite} />
+                  </div>
+
+                  <div className="col-span-2 lg:col-span-1">
+                    <Label>City</Label>
+                    <Input type="text" defaultValue={user.address.city} />
+                  </div>
+
+                  <div className="col-span-2 lg:col-span-1">
+                    <Label>Zipcode</Label>
+                    <Input type="text" defaultValue={user.address.zipcode} />
                   </div>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
     Table,
     TableBody,
@@ -172,7 +173,9 @@ export default  function UserTable({ users }: { users: User[] }) {
                             {filteredAndSortedUsers.map((user: User) => (
                                 <TableRow key={user.id}>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {user.name}
+                                        <Link href={`/users/${user.id}`} className="text-blue-600 hover:underline">
+                                            {user.name}
+                                        </Link>
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         {user.username}

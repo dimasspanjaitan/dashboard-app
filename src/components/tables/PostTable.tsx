@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
     Table,
     TableBody,
@@ -59,7 +60,7 @@ export default  function PostTable({ posts }: { posts: Post[] }) {
     const renderSortArrow = (key: keyof Post) => sortBy === key ? (sortDirection === 'asc' ? ' ↑' : ' ↓') : '';
     
     return (
-        <div className="spcae-y-6">
+        <div className="space-y-6">
             <div className="relative">
                 <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
                     <svg
@@ -123,7 +124,9 @@ export default  function PostTable({ posts }: { posts: Post[] }) {
                             {filteredAndSortedPosts.map((post: Post) => (
                                 <TableRow key={post.id}>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {post.user?.name}
+                                        <Link href={`/users/${post.userId}`} className="text-blue-600 hover:underline">
+                                            {post.user?.name}
+                                        </Link>
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         {post.title}
