@@ -68,7 +68,6 @@ export default  function PostTable({ posts }: { posts: Post[] }) {
         (page - 1) * postsPerPage,
         page * postsPerPage
     );
-    // console.log(currentPosts);
 
     return (
         <div className="space-y-6">

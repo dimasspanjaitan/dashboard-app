@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import SearchBar from '@/components/common/SearchBar'
+import Pagination from "@/components/common/Pagination";
 import {
     Table,
     TableBody,
@@ -39,6 +40,8 @@ export default  function UserTable({ users }: { users: User[] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState<keyof User>('name');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const [page, setPage] = useState(1);
+    const usersPerPage = 10;
 
     const handleSort = (key: keyof User) => {
         if (sortBy === key) {
@@ -76,6 +79,12 @@ export default  function UserTable({ users }: { users: User[] }) {
     }, [users, searchTerm, sortBy, sortDirection]);
 
     const renderSortArrow = (key: keyof User) => sortBy === key ? (sortDirection === 'asc' ? ' ↑' : ' ↓') : '';
+
+    const totalPages = Math.ceil(filteredAndSortedUsers.length / usersPerPage);
+    const currentUsers = filteredAndSortedUsers.slice(
+        (page - 1) * usersPerPage,
+        page * usersPerPage
+    );
 
     return (
         <div className="space-y-6">
@@ -149,7 +158,7 @@ export default  function UserTable({ users }: { users: User[] }) {
 
                             {/* Table Body */}
                             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                            {filteredAndSortedUsers.map((user: User) => (
+                            {currentUsers.map((user: User) => (
                                 <TableRow key={user.id}>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         <Link href={`/users/${user.id}`} className="text-blue-600 hover:underline">
