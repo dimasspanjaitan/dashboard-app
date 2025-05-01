@@ -116,8 +116,8 @@ This project is optimized for deployment on [Vercel](https://vercel.com/), the o
    When deploying to Vercel, ensure the following build settings are correctly configured:
 
     - **Framework Preset**: `Next.js`
-    - **Build Command**: `next build`
-    - **Install Command**: `npm install` or `pnpm install`
+    - **Build Command**: `npm run build`
+    - **Install Command**: `npm install`
     - **Output Directory**: `.next`
 
     Vercel automatically detects these for most Next.js projects, so no manual changes are usually required.
