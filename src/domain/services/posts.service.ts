@@ -18,7 +18,7 @@ export async function getPostsByUserId(userid: number): Promise<Post[]> {
             const posts = await getPosts();
 
             return posts.filter((post: Post) => post.userId === userid)
-      } catch (error) {
+      } catch {
             return []
       }
 }
@@ -44,7 +44,7 @@ export async function getPostswithUser(): Promise<Post[]> {
                         user: user
                   }
             })
-      } catch (error) {
+      } catch {
             return posts
       }
 }

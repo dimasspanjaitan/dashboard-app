@@ -9,7 +9,7 @@ const users: UserSignin[] = [{
 }]
 
 export function findUser(username: string) {
-      return users.find((user: any) => user.username === username);
+      return users.find((user: UserSignin) => user.username === username);
 }
 
 export function validateUserPassword(password: string, user: UserSignin) {

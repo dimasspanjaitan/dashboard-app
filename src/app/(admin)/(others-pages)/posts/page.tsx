@@ -3,8 +3,10 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import PostTable from "@/components/tables/PostTable";
 import { Metadata } from "next";
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
-    title: "Posts",
+    title: "Posts | DIKEY TECH.",
     description:
       "This is Posts List for Admin Dashboard",
     // other metadata
@@ -30,7 +32,7 @@ export default async function PostsPage() {
         <div>
             <PageBreadcrumb pageTitle="Posts" />
             <div className="space-y-6">
-                <ComponentCard title="Table 1">
+                <ComponentCard title=''>
                     <PostTable posts={posts} />
                 </ComponentCard>
             </div>

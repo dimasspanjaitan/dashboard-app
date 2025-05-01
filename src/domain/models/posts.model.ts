@@ -11,7 +11,7 @@ export interface PostwithUser extends Post {
     user: User;
 }
 
-const BACKEND_URL: string = process.env.BACKEND_URL ?? 'http://localhost:3000'
+const BACKEND_URL: string = process.env.BACKEND_URL ?? 'http://localhost:8000'
 const POSTS_URL: URL = new URL('/posts', BACKEND_URL)
   
 export async function fetchPosts() {

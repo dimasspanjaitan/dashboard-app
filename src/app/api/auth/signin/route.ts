@@ -26,8 +26,9 @@ export async function POST(request: NextRequest) {
                         "Set-Cookie": `token=${token}; Path=/; SameSite=Lax; HttpOnly;`,
                   },
             })
-      } catch(err: any){
-            return new NextResponse(err.message, {
+      } catch(error: unknown){
+            const message = error instanceof Error ? error.message : "Unknown error occurred";
+            return new NextResponse(message, {
                   status: 401,
                   headers: {
                         "Content-Type": "text/plain",

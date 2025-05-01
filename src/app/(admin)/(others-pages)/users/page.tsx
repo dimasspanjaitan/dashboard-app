@@ -4,10 +4,10 @@ import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import UserTable from "@/components/tables/UserTable";
 
-console.log(UserTable);
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Users",
+  title: "Users | DIKEY TECH.",
   description:
     "This is Users List for Admin Dashboard",
   // other metadata
@@ -33,7 +33,7 @@ export default async function UsersPage() {
         <div>
             <PageBreadcrumb pageTitle="Users" />
             <div className="space-y-6">
-                <ComponentCard title="">
+                <ComponentCard title=''>
                     <UserTable users={users} />
                 </ComponentCard>
             </div>

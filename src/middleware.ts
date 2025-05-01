@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
     }
 
     const authenticated = await isAuthenticated(request);
-        console.log('middleware authenticated', authenticated);
 
     if (authenticated && pathname.startsWith('/signin')) {
         const dashboardUrl = new URL('/', request.url);
@@ -22,8 +21,6 @@ export async function middleware(request: NextRequest) {
     }
 
     if (!authenticated && !pathname.startsWith('/signin')) {
-        console.log('middleware unauthenticated, should redirect to login page');
-
         const loginUrl = new URL('/signin', request.url);
         return NextResponse.redirect(loginUrl);
     }

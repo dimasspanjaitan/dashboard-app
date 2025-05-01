@@ -10,8 +10,6 @@ import { userSchema } from './userSchema';
 import type { User } from '@/domain/models/users.model';
 import * as Yup from 'yup';
 
-const apiUrl = process.env.API_URL;
-
 type UserFormSchema = Yup.InferType<typeof userSchema>;
 
 

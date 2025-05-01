@@ -15,8 +15,7 @@ export async function isAuthenticated(request: NextRequest) {
 
             return true
 
-      } catch (error) {
-            console.error('isAuthenticated error', error);
+      } catch {
             return false;
       }
 }

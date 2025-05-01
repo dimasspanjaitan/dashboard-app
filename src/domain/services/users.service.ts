@@ -20,7 +20,7 @@ export async function getUsers(): Promise<User[]> {
                         posts: post
                   }
             })
-      } catch (error) {
+      } catch {
             return users
       }
 }

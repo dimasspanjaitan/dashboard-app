@@ -35,13 +35,12 @@ export default function SignInForm() {
           }
           
           if (resp.ok) {
-            console.log("checked! Token set, redirecting to /");
-            router.push('/');
+            router.refresh();
           }
 
-      } catch (err: any) {
-          const errorMessage = err.message || 'Failed to sign in';
-          setError(errorMessage)
+      } catch (error: unknown) {
+          const message = error instanceof Error ? error.message : 'Failed to sign in';
+          setError(message);
       }
   }
 

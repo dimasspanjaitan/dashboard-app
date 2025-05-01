@@ -31,7 +31,7 @@ export type Company = {
     bs: string
 }
   
-const BACKEND_URL: string = process.env.BACKEND_URL ?? 'http://localhost:3000'
+const BACKEND_URL: string = process.env.BACKEND_URL ?? 'http://localhost:8000'
 const USERS_URL: URL = new URL('/users', BACKEND_URL)
   
 export async function fetchUsers(): Promise<User[] | null> {
@@ -39,8 +39,8 @@ export async function fetchUsers(): Promise<User[] | null> {
         const res = await fetch(new URL(USERS_URL));;
         const users = await res.json();
         return users as User[];
-    } catch (error) {
-        throw new Error('failed to fetch users');
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : 'failed to fetch users';
+        throw new Error(message);
     }
-}
-  
+}  

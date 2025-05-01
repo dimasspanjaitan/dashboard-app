@@ -4,24 +4,20 @@ import UserMetaCard from "@/components/user-profile/UserMetaCard";
 import { Metadata } from "next";
 import React from "react";
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
-    title: "Detail User",
+    title: "Detail User | DIKEY TECH.",
     description:
         "This is Detailed User Data",
 };
 
-type Params = { params: { id: string } };
+type Params = { params: Promise<{ id: string }> };
 const apiUrl = process.env.API_URL;
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function generateStaticParams() {
-    const res = await fetch(new URL(apiUrl + '/users', baseUrl));
-    const users = await res.json();
-    return users.map((user: any) => ({ id: String(user.id) }));
-}
-
 export default async function UserDetailPage({ params }: Params) {
-    const { id } = params;
+    const { id } = await params;
     const userRes = await fetch(new URL(apiUrl + `/users/${id}`, baseUrl));
     const user = await userRes.json();
 
