@@ -1,41 +1,19 @@
 "use client";
 import React from "react";
-import { useModal } from "../../hooks/useModal";
-import { Modal } from "../ui/modal";
-import Button from "../ui/button/Button";
-import Input from "../form/input/InputField";
-import Label from "../form/Label";
-
+import { useModal } from "@/hooks/useModal";
+import { Modal } from "@/components/ui/modal";
+import Button from "@/components/ui/button/Button";
+import Label from "@/components/form/Label";
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { userSchema } from './userSchema';
-import * as yup from 'yup';
+import type { User } from '@/domain/models/users.model';
+import * as Yup from 'yup';
 
 const apiUrl = process.env.API_URL;
 
-type User = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: {
-      street: string;
-      suite: string;
-      city: string;
-      zipcode: string;
-      geo: {
-          lat: string;
-          lng: string;
-      };
-  };
-  phone: string;
-  website: string
-  company: {
-      name: string;
-      catchPhrase: string;
-      bs: string;
-  },
-};
+type UserFormSchema = Yup.InferType<typeof userSchema>;
+
 
 function splitName(fullName: string): { firstName: string; lastName: string } {
   const [firstName, ...rest] = fullName.trim().split(" ");
@@ -47,50 +25,33 @@ function splitName(fullName: string): { firstName: string; lastName: string } {
 
 export default function UserInfoCard({ 
   user, 
-  onSubmit,
 }: {
   user: User;
-  onSubmit: (data: User) => void;
 }) {
   const { firstName, lastName } = splitName(user.name);
   const { isOpen, openModal, closeModal } = useModal();
-
-  const handleSave = async (data: any) => {
-    try {
-      const res = await fetch(apiUrl +  `/users/${user.id}`, {
-        method: 'PUT', // or PATCH
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      const result = await res.json();
-      console.log('Updated user:', result);
-      alert('User updated successfully!');
-      onClose(); // close modal after success
-    } catch (err) {
-      console.error('Update failed', err);
-      alert('Failed to update user');
-    }
-  };
   
   const {
     register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<User>({
+    formState: { errors },
+  } = useForm<UserFormSchema>({
     resolver: yupResolver(userSchema),
     defaultValues: {
       name: user.name,
       email: user.email,
       phone: user.phone,
       website: user.website,
-      company: user.company.name,
-      street: user.address.street,
-      suite: user.address.suite,
-      city: user.address.city,
-      zipcode: user.address.zipcode
+      company: {
+          name: user.company.name,
+          catchPhrase: user.company.catchPhrase,
+          bs: user.company.bs
+      },
+      address: {
+          street: user.address.street,
+          suite: user.address.suite,
+          city: user.address.city,
+          zipcode: user.address.zipcode
+      }
     },
   });
 
@@ -236,7 +197,7 @@ export default function UserInfoCard({
               Update user details to keep profile up-to-date.
             </p>
           </div>
-          <form onSubmit={handleSubmit(handleSave)} className="flex flex-col">
+          <form className="flex flex-col">
             <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
               <div className="mt-7">
                 <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
@@ -283,26 +244,26 @@ export default function UserInfoCard({
                 <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Street</Label>
-                    <input {...register('street')} placeholder="Street" />
-                    {errors.street && <p>{errors.street.message}</p>}
+                    <input {...register('address.street')} placeholder="Street" />
+                    {errors.address?.street && <p>{errors.address.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Suite</Label>
-                    <input {...register('suite')} placeholder="Suite" />
-                    {errors.suite && <p>{errors.suite.message}</p>}
+                    <input {...register('address.suite')} placeholder="Suite" />
+                    {errors.address?.suite && <p>{errors.address?.suite.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>City</Label>
-                    <input {...register('city')} placeholder="City" />
-                    {errors.city && <p>{errors.city.message}</p>}
+                    <input {...register('address.city')} placeholder="City" />
+                    {errors.address?.city && <p>{errors.address.city?.message}</p>}
                   </div>
 
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Zipcode</Label>
-                    <input {...register('zipcode')} placeholder="Zipcode" />
-                    {errors.zipcode && <p>{errors.zipcode.message}</p>}
+                    <input {...register('address.zipcode')} placeholder="Zipcode" />
+                    {errors.address?.zipcode && <p>{errors.address.zipcode?.message}</p>}
                   </div>
                 </div>
               </div>
@@ -311,9 +272,9 @@ export default function UserInfoCard({
               <Button size="sm" variant="outline" onClick={closeModal}>
                 Close
               </Button>
-              <Button size="sm" type="submit">
+              {/* <Button size="sm">
                 Save Changes
-              </Button>
+              </Button> */}
             </div>
           </form>
         </div>

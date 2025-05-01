@@ -3,7 +3,6 @@ import UserInfoCard from "@/components/user-profile/UserInfoCard";
 import UserMetaCard from "@/components/user-profile/UserMetaCard";
 import { Metadata } from "next";
 import React from "react";
-import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
     title: "Detail User",
@@ -13,22 +12,18 @@ export const metadata: Metadata = {
 
 type Params = { params: { id: string } };
 const apiUrl = process.env.API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function generateStaticParams() {
-    const res = await fetch(apiUrl + '/users');
+    const res = await fetch(new URL(apiUrl + '/users', baseUrl));
     const users = await res.json();
     return users.map((user: any) => ({ id: String(user.id) }));
 }
 
 export default async function UserDetailPage({ params }: Params) {
     const { id } = params;
-    const userRes = await fetch(apiUrl + `/users/${id}`);
-    const postsRes = await fetch(apiUrl + `/posts?userId=${id}`);
-
-    if (!userRes.ok || !postsRes.ok) return notFound();
-
+    const userRes = await fetch(new URL(apiUrl + `/users/${id}`, baseUrl));
     const user = await userRes.json();
-    const posts = await postsRes.json();
 
     return (
         <div>
@@ -39,7 +34,7 @@ export default async function UserDetailPage({ params }: Params) {
                 <div className="space-y-6">
                     <UserMetaCard user={user}/>
                     <UserInfoCard user={user}/>
-                    <UserPostCard posts={posts}/>
+                    <UserPostCard posts={user.posts||[]}/>
                 </div>
             </div>
         </div>

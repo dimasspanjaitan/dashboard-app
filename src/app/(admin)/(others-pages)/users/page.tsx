@@ -14,15 +14,16 @@ export const metadata: Metadata = {
 };
 
 const apiUrl = process.env.API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 async function getUsers() {
-    const res = await fetch(apiUrl + '/users', {
+    const res = await fetch(new URL(apiUrl + '/users', baseUrl), {
         next: {
             revalidate: 60, // Revalidate every 1 minute (ISR / Incremental Static Regeneration)
         }
     });
     if (!res.ok) throw new Error('Failed to fetch users');
-    return res.json();
+    return await res.json();
 }
 
 export default async function UsersPage() {
@@ -32,7 +33,7 @@ export default async function UsersPage() {
         <div>
             <PageBreadcrumb pageTitle="Users" />
             <div className="space-y-6">
-                <ComponentCard>
+                <ComponentCard title="">
                     <UserTable users={users} />
                 </ComponentCard>
             </div>

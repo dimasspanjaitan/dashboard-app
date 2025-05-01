@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 };
 
 const apiUrl = process.env.API_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 async function getPosts() {
-    const res = await fetch(apiUrl + '/posts', {
-        cache: 'no-store',
+    const res = await fetch(new URL(apiUrl + '/posts', baseUrl), {
         next: {
             revalidate: 60, // Revalidate every 1 minute (ISR / Incremental Static Regeneration)
         }
@@ -23,23 +23,8 @@ async function getPosts() {
     return res.json();
 }
 
-async function getUsers() {
-    const res = await fetch(apiUrl + '/users', {
-        next: {
-            revalidate: 60, // Revalidate every 1 minute (ISR / Incremental Static Regeneration)
-        }
-    });
-    if (!res.ok) throw new Error('Failed to fetch users');
-    return res.json();
-}
-
 export default async function PostsPage() {
     const posts = await getPosts();
-    const users = await getUsers();
-    posts.map((p) => {
-        p.user = users.find(x => x.id == p.userId)
-        return p;
-    })
           
     return (
         <div>

@@ -1,31 +1,8 @@
 "use client";
 import React from "react";
-import { useModal } from "../../hooks/useModal";
-import { Modal } from "../ui/modal";
-import Button from "../ui/button/Button";
-import Input from "../form/input/InputField";
-import Label from "../form/Label";
-import Image from "next/image";
+import type { User } from '@/domain/models/users.model'
 
-type User = {
-  id: number;
-  name: string;
-  address: {
-      street: string;
-      city: string;
-  };
-  company: {
-      name: string;
-  }
-};
-
-export default function UserMetaCard({ user }: { user: User[] }) {
-  const { isOpen, openModal, closeModal } = useModal();
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
-    closeModal();
-  };
+export default function UserMetaCard({ user }: { user: User }) {
   return (
     <>
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">

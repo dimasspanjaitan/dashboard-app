@@ -1,26 +1,10 @@
 "use client";
 import React from "react";
-import { useModal } from "../../hooks/useModal";
-import { Modal } from "../ui/modal";
-import Button from "../ui/button/Button";
-import Input from "../form/input/InputField";
-import Label from "../form/Label";
 import PostList from "@/components/posts/PostList"
 
-type Post = {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-};
+import type { Post } from "@/domain/models/posts.model"
 
-export default function UserAddressCard({ posts }: {posts: Post}) {
-    const { isOpen, openModal, closeModal } = useModal();
-    const handleSave = () => {
-        // Handle save logic here
-        console.log("Saving changes...");
-        closeModal();
-    };
+export default function UserAddressCard({ posts }: {posts: Post[]}) {
     return (
         <>
             <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">

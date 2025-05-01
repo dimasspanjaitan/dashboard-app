@@ -4,37 +4,14 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import SearchBar from '@/components/common/SearchBar'
 import Pagination from "@/components/common/Pagination";
+import type { User } from '@/domain/models/users.model'
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from "../ui/table";
-
-type User = {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    address: {
-        street: string;
-        suite: string;
-        city: string;
-        zipcode: string;
-        geo: {
-            lat: string;
-            lng: string;
-        };
-    };
-    phone: string;
-    website: string
-    company: {
-        name: string;
-        catchPhrase: string;
-        bs: string;
-    }
-};
+} from "@/components/ui/table";
 
 export default  function UserTable({ users }: { users: User[] }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -54,7 +31,7 @@ export default  function UserTable({ users }: { users: User[] }) {
 
     const filteredAndSortedUsers = useMemo(() => {
         const filtered = users.filter((user) => {
-            const target = `${user.name} ${user.username} ${user.email} ${user.phone} ${user.website} ${user.company.name}`.toLowerCase();
+            const target = `${user.id} ${user.name} ${user.username} ${user.email}`.toLowerCase();
             return target.includes(searchTerm.toLowerCase());
         });
     
@@ -100,58 +77,31 @@ export default  function UserTable({ users }: { users: User[] }) {
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                             <TableRow>
                                 <TableCell
-                                isHeader
-                                onClick={() => handleSort('name')}
-                                className="cursor-pointer"
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                Name{renderSortArrow('name')}
+                                    isHeader
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                                    >
+                                    ID
                                 </TableCell>
                                 <TableCell
-                                isHeader
-                                onClick={() => handleSort('username')}
-                                className="cursor-pointer"
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                Username{renderSortArrow('username')}
+                                    isHeader
+                                    onClick={() => handleSort('name')}
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
+                                    >
+                                    Name{renderSortArrow('name')}
                                 </TableCell>
                                 <TableCell
-                                isHeader
-                                onClick={() => handleSort('email')}
-                                className="cursor-pointer"
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                Email{renderSortArrow('email')}
+                                    isHeader
+                                    onClick={() => handleSort('username')}
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
+                                    >
+                                    Username{renderSortArrow('username')}
                                 </TableCell>
                                 <TableCell
-                                isHeader
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                Address
-                                </TableCell>
-                                <TableCell
-                                isHeader
-                                onClick={() => handleSort('phone')}
-                                className="cursor-pointer"
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                Phone{renderSortArrow('phone')}
-                                </TableCell>
-                                <TableCell
-                                isHeader
-                                onClick={() => handleSort('website')}
-                                className="cursor-pointer"
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                Website{renderSortArrow('website')}
-                                </TableCell>
-                                <TableCell
-                                isHeader
-                                onClick={() => handleSort('company')}
-                                className="cursor-pointer"
-                                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                                >
-                                Company{renderSortArrow('company')}
+                                    isHeader
+                                    onClick={() => handleSort('email')}
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
+                                    >
+                                    Email{renderSortArrow('email')}
                                 </TableCell>
                             </TableRow>
                             </TableHeader>
@@ -160,6 +110,9 @@ export default  function UserTable({ users }: { users: User[] }) {
                             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                             {currentUsers.map((user: User) => (
                                 <TableRow key={user.id}>
+                                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                        {user.id}
+                                    </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         <Link href={`/users/${user.id}`} className="text-blue-600 hover:underline">
                                             {user.name}
@@ -171,24 +124,19 @@ export default  function UserTable({ users }: { users: User[] }) {
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         {user.email}
                                     </TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {user.address.street}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {user.phone}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {user.website}
-                                    </TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {user.company.name}
-                                    </TableCell>
                                 </TableRow>
                             ))}
                             </TableBody>
                         </Table>
                     </div>
                 </div>
+            </div>
+            <div>
+                <Pagination 
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
             </div>
         </div>        
     );

@@ -15,9 +15,15 @@ export const userSchema = yup.object({
         .url('Must be a valid URL')
         .required('Website is required'),
     address: yup.object({
-      street: yup.string().required('Street is required'),
-      suite: yup.string().required('Suite is required'),
-      city: yup.string().required('City is required'),
-      zipcode: yup.string().required('Zipcode is required'),
+        street: yup.string().required('Street is required'),
+        suite: yup.string().required('Suite is required'),
+        city: yup.string().required('City is required'),
+        zipcode: yup.string().required('Zipcode is required'),
     }),
+    company: yup.object({
+        name: yup.string(),
+        catchPhrase: yup.string(),
+        bs: yup.string(),
+    }),
+    // companyName: yup.string(),
 });

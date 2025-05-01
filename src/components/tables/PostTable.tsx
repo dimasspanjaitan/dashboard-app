@@ -4,29 +4,23 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import SearchBar from '@/components/common/SearchBar'
 import Pagination from "@/components/common/Pagination";
+import type { PostwithUser } from "@/domain/models/posts.model"
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from "../ui/table";
+} from "@/components/ui/table";
 
-interface Post {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-}
-
-export default  function PostTable({ posts }: { posts: Post[] }) {
+export default  function PostTable({ posts }: { posts: PostwithUser[] }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [sortBy, setSortBy] = useState<keyof Post>('name');
+    const [sortBy, setSortBy] = useState<keyof PostwithUser>('title');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
     const [page, setPage] = useState(1);
     const postsPerPage = 10;
 
-    const handleSort = (key: keyof Post) => {
+    const handleSort = (key: keyof PostwithUser) => {
         if (sortBy === key) {
           setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
         } else {
@@ -61,7 +55,7 @@ export default  function PostTable({ posts }: { posts: Post[] }) {
         });
     }, [posts, searchTerm, sortBy, sortDirection]);
 
-    const renderSortArrow = (key: keyof Post) => sortBy === key ? (sortDirection === 'asc' ? ' ↑' : ' ↓') : '';
+    const renderSortArrow = (key: keyof PostwithUser) => sortBy === key ? (sortDirection === 'asc' ? ' ↑' : ' ↓') : '';
 
     const totalPages = Math.ceil(filteredAndSortedPosts.length / postsPerPage);
     const currentPosts = filteredAndSortedPosts.slice(
@@ -83,25 +77,20 @@ export default  function PostTable({ posts }: { posts: Post[] }) {
                             <TableRow>
                                 <TableCell
                                     isHeader
-                                    onClick={() => handleSort('name')}
-                                    className="cursor-pointer"
-                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
                                     >
                                     ID
                                 </TableCell>
                                 <TableCell
                                     isHeader
-                                    onClick={() => handleSort('name')}
-                                    className="cursor-pointer"
-                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
                                     >
-                                    Creator{renderSortArrow('name')}
+                                    Creator
                                 </TableCell>
                                 <TableCell
                                     isHeader
                                     onClick={() => handleSort('title')}
-                                    className="cursor-pointer"
-                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
                                     >
                                     Title{renderSortArrow('title')}
                                 </TableCell>
@@ -116,7 +105,7 @@ export default  function PostTable({ posts }: { posts: Post[] }) {
 
                             {/* Table Body */}
                             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                            {currentPosts.map((post: Post) => (
+                            {currentPosts.map((post: PostwithUser) => (
                                 <TableRow key={post.id}>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         {post.id}
