@@ -31,6 +31,7 @@ export default function UserInfoCard({
   
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm<UserFormSchema>({
     resolver: yupResolver(userSchema),
@@ -52,6 +53,8 @@ export default function UserInfoCard({
       }
     },
   });
+
+  const onSubmit = (data: UserFormSchema) => {};
 
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -186,96 +189,126 @@ export default function UserInfoCard({
       </div>
 
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
-        <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
-          <div className="px-2 pr-14">
-            <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-              Edit Personal Information
-            </h4>
-            <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-              Update user details to keep profile up-to-date.
-            </p>
+          <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
+              <div className="px-2 pr-14">
+                  <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
+                      Edit Personal Information
+                  </h4>
+                  <p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
+                      Update user details to keep profile up-to-date.
+                  </p>
+              </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+                <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
+
+                  <hr className="my-4 border-gray-200 dark:border-white/[0.1]" />
+
+                  <div className="mt-7">
+                      <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+                          Personal Information
+                      </h5>
+
+                      <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                          <div className="col-span-2 lg:col-span-1">
+                              <Label>Full Name</Label>
+                              <input type="text" {...register('name')} placeholder="Name" />
+                              {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
+                          </div>
+
+                          <div className="col-span-2 lg:col-span-1">
+                              <Label>Email Address</Label>
+                              <input {...register('email')} placeholder="Email" />
+                              {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+                          </div>
+
+                          <div className="col-span-2 lg:col-span-1">
+                              <Label>Phone</Label>
+                              <input {...register('phone')} placeholder="Phone" />
+                              {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>}
+                          </div>
+
+                          <div className="col-span-2 lg:col-span-1">
+                              <Label>Website</Label>
+                              <input {...register('website')} placeholder="Website" />
+                              {errors.website && <p className="mt-1 text-sm text-red-500">{errors.website.message}</p>}
+                          </div>
+
+                      </div>
+                  </div>
+
+                  <hr className="my-4 border-gray-200 dark:border-white/[0.1]" />
+
+                  <div className="mt-7">
+                      <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+                        Company
+                      </h5>
+
+                      <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                          <div className="col-span-2 lg:col-span-1">
+                              <Label>Company Name</Label>
+                              <input {...register('company.name')} placeholder="Company" />
+                              {errors.company?.name && <p className="mt-1 text-sm text-red-500">{errors.company.name.message}</p>}
+                          </div>
+
+                          <div className="col-span-2 lg:col-span-1">
+                              <Label>Company Catch Phrase</Label>
+                              <input {...register('company.catchPhrase')} placeholder="Company" />
+                              {errors.company?.catchPhrase && <p className="mt-1 text-sm text-red-500">{errors.company.catchPhrase.message}</p>}
+                          </div>
+
+                          <div className="col-span-2 lg:col-span-1">
+                              <Label>Company BS</Label>
+                              <input {...register('company.bs')} placeholder="Company" />
+                              {errors.company?.bs && <p className="mt-1 text-sm text-red-500">{errors.company.bs.message}</p>}
+                          </div>
+                      </div>
+                  </div>
+                </div>
+
+                <hr className="my-4 border-gray-200 dark:border-white/[0.1]" />
+
+                <div className="mt-7">
+                    <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
+                        Address
+                    </h5>
+
+                    <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
+                        <div className="col-span-2 lg:col-span-1">
+                            <Label>Street</Label>
+                            <input {...register('address.street')} placeholder="Street" />
+                            {errors.address?.street && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
+                        </div>
+
+                        <div className="col-span-2 lg:col-span-1">
+                            <Label>Suite</Label>
+                            <input {...register('address.suite')} placeholder="Suite" />
+                            {errors.address?.suite && <p className="mt-1 text-sm text-red-500">{errors.address.suite.message}</p>}
+                        </div>
+
+                        <div className="col-span-2 lg:col-span-1">
+                            <Label>City</Label>
+                            <input {...register('address.city')} placeholder="City" />
+                            {errors.address?.city && <p className="mt-1 text-sm text-red-500">{errors.address.city.message}</p>}
+                        </div>
+
+                        <div className="col-span-2 lg:col-span-1">
+                            <Label>Zipcode</Label>
+                            <input type="number" {...register('address.zipcode')} placeholder="Zipcode" />
+                            {errors.address?.zipcode && <p className="mt-1 text-sm text-red-500">{errors.address.zipcode.message}</p>}
+                        </div>
+
+                    </div>
+                </div>
+                <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
+                    <Button size="sm" variant="outline" onClick={closeModal}>
+                        Close
+                    </Button>
+                    <Button size="sm">
+                        Save Changes
+                    </Button>
+                </div>
+              </form>
           </div>
-          <form className="flex flex-col">
-            <div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
-              <div className="mt-7">
-                <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-                  Personal Information
-                </h5>
-
-                <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Full Name</Label>
-                    <input {...register('name')} placeholder="Name" />
-                    {errors.name && <p>{errors.name.message}</p>}
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Email Address</Label>
-                    <input {...register('email')} placeholder="Email" />
-                    {errors.email && <p>{errors.email.message}</p>}
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Phone</Label>
-                    <input {...register('phone')} placeholder="Phone" />
-                    {errors.phone && <p>{errors.phone.message}</p>}
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Website</Label>
-                    <input {...register('website')} placeholder="Website" />
-                    {errors.website && <p>{errors.website.message}</p>}
-                  </div>
-
-                  <div className="col-span-2">
-                    <Label>Company</Label>
-                    <input {...register('company')} placeholder="Company" />
-                    {errors.company && <p>{errors.company.message}</p>}
-                  </div>
-                </div>
-              </div>
-              <div className="mt-7">
-                <h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-                  Address
-                </h5>
-
-                <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Street</Label>
-                    <input {...register('address.street')} placeholder="Street" />
-                    {errors.address?.street && <p>{errors.address.message}</p>}
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Suite</Label>
-                    <input {...register('address.suite')} placeholder="Suite" />
-                    {errors.address?.suite && <p>{errors.address?.suite.message}</p>}
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>City</Label>
-                    <input {...register('address.city')} placeholder="City" />
-                    {errors.address?.city && <p>{errors.address.city?.message}</p>}
-                  </div>
-
-                  <div className="col-span-2 lg:col-span-1">
-                    <Label>Zipcode</Label>
-                    <input {...register('address.zipcode')} placeholder="Zipcode" />
-                    {errors.address?.zipcode && <p>{errors.address.zipcode?.message}</p>}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button size="sm" variant="outline" onClick={closeModal}>
-                Close
-              </Button>
-              {/* <Button size="sm">
-                Save Changes
-              </Button> */}
-            </div>
-          </form>
-        </div>
       </Modal>
     </div>
   );
