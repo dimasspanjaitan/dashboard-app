@@ -54,7 +54,9 @@ export default function UserInfoCard({
     },
   });
 
-  const onSubmit = (data: UserFormSchema) => {};
+  const onSubmit = (data: UserFormSchema) => {
+    console.log(data);
+  };
 
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
