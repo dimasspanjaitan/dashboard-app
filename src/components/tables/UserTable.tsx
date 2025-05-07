@@ -45,6 +45,12 @@ export default  function UserTable({ users }: { users: User[] }) {
           if (typeof bVal === 'object' && bVal !== null) {
             bVal = 'name' in bVal ? bVal.name : '';
           }
+
+          if (sortBy === 'id') {
+            return sortDirection === 'asc'
+              ? Number(aVal) - Number(bVal)
+              : Number(bVal) - Number(aVal);
+          }
     
           const aStr = String(aVal).toLowerCase();
           const bStr = String(bVal).toLowerCase();
