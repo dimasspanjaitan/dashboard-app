@@ -77,15 +77,17 @@ export default  function PostTable({ posts }: { posts: PostwithUser[] }) {
                             <TableRow>
                                 <TableCell
                                     isHeader
+                                    onClick={() => handleSort('id')}
                                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
                                     >
-                                    ID
+                                    ID{renderSortArrow('id')}
                                 </TableCell>
                                 <TableCell
                                     isHeader
+                                    onClick={() => handleSort('user')}
                                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
                                     >
-                                    Creator
+                                    Creator{renderSortArrow('user')}
                                 </TableCell>
                                 <TableCell
                                     isHeader
@@ -105,7 +107,7 @@ export default  function PostTable({ posts }: { posts: PostwithUser[] }) {
 
                             {/* Table Body */}
                             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                            {currentPosts.map((post: PostwithUser) => (
+                            {currentPosts.map((post) => (
                                 <TableRow key={post.id}>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         {post.id}

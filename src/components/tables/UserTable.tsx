@@ -78,9 +78,10 @@ export default  function UserTable({ users }: { users: User[] }) {
                             <TableRow>
                                 <TableCell
                                     isHeader
-                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                                    onClick={() => handleSort('id')}
+                                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 cursor-pointer"
                                     >
-                                    ID
+                                    ID{renderSortArrow('id')}
                                 </TableCell>
                                 <TableCell
                                     isHeader
@@ -108,7 +109,7 @@ export default  function UserTable({ users }: { users: User[] }) {
 
                             {/* Table Body */}
                             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                            {currentUsers.map((user: User) => (
+                            {currentUsers.map((user) => (
                                 <TableRow key={user.id}>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                         {user.id}
